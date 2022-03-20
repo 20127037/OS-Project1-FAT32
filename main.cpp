@@ -63,7 +63,7 @@ int main(int argc, char ** argv)
     BYTE sector[512];
     ReadSector(L"\\\\.\\E:", 0, sector); // Đọc ổ USB
     displayBootSector(sector); // Display bảng boot sector
-
+    // Anh Dep Trai
     return 0;
 }
 // test
