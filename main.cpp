@@ -65,7 +65,10 @@ int main(int argc, char ** argv)
     cout << "Read disk: ";
     cin >> namePath;
     string disk = "\\\\.\\" + namePath + ":";
-    ReadSector(L"\\\\.\\E:", 0, sector); // ??c ? USB
+    wstring temp = ConvertWStr(disk);
+    LPCWSTR drive = temp.c_str;
+
+    ReadSector(drive, 0, sector); // ??c ? USB
     displayBootSector(sector); // Display b?ng boot sector
     
     return 0;
