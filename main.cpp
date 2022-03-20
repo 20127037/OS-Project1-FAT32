@@ -23,7 +23,7 @@ int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
         return 1;
     }
 
-    SetFilePointer(device, readPoint, NULL, FILE_BEGIN);//Set a Point to Read
+    SetFilePointer(device, readPoint, NULL, FILE_BEGIN); // Set a Point to Read
 
     if (!ReadFile(device, sector, 512, &bytesRead, NULL))
     {
