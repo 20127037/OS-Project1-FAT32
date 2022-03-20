@@ -61,9 +61,12 @@ int main(int argc, char ** argv)
 {
     
     BYTE sector[512];
+    string namePath;
+    cout << "Read disk: ";
+    cin >> namePath;
+    string disk = "\\\\.\\" + namePath + ":";
     ReadSector(L"\\\\.\\E:", 0, sector); // ??c ? USB
     displayBootSector(sector); // Display b?ng boot sector
     
     return 0;
-    // test
 }
