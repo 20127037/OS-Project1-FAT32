@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <stdio.h>
+#include <fstream>
 #include <Windows.h>
 using namespace std;
 
@@ -21,5 +21,10 @@ private:
 	string _FAT = ""; // Offset 52 - số byte 8 - Loại FAT, là chuỗi "FAT32"
 
 public:
-	void readInfor(BYTE sector);
+	string convertSectorToString(BYTE*);
+	void displayBootSector(BYTE*);
+	void readInfor(string*);
+	long int convertHexToDec(string);
+	long int littleEndian(string*, string, unsigned int);
+	void print();
 };
