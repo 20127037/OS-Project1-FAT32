@@ -1,4 +1,4 @@
-﻿#include <windows.h>
+#include <windows.h>
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
@@ -61,10 +61,8 @@ int main(int argc, char ** argv)
 {
     
     BYTE sector[512];
-    ReadSector(L"\\\\.\\E:", 0, sector); // Đọc ổ USB
-    displayBootSector(sector); // Display bảng boot sector
-    // Anh Dep Trai
+    ReadSector(L"\\\\.\\E:", 0, sector); // ??c ? USB
+    displayBootSector(sector); // Display b?ng boot sector
+    
     return 0;
-    // HELLO
 }
-// test !!!
