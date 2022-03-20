@@ -61,8 +61,8 @@ int main(int argc, char ** argv)
     LPCWSTR drive = temp.c_str();
                         
     ReadSector(drive, 0, sector); // ??c ? USB
-    displayBootSector(sector); // Display b?ng boot sector
-    cout << "--------------------------" << endl;
+    T.displayBootSector(sector); // Display b?ng boot sector
+    cout << endl <<"--------------------------" << endl;
     string res[512];
     T.convertSectorToString(sector, res);
     T.readInfor(res);

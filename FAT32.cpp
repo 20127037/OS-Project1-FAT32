@@ -4,6 +4,8 @@ void FAT32::convertSectorToString(BYTE sector[512], string sector_str[512]) {
     stringstream ss;
     string result;
     for (int i = 0; i < 512; i++) {
+        ss.str("");
+        ss.clear();
         ss << hex << int(sector[i]);
         result = ss.str();
         sector_str[i] = result;
