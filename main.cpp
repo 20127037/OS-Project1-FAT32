@@ -1,8 +1,5 @@
-#include <windows.h>
-#include <iostream>
-#include <iomanip>
-#include <stdio.h>
-using namespace std;
+#include "FAT32.h"
+
 int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
 {
     int retCode = 0;
@@ -66,7 +63,7 @@ int main(int argc, char ** argv)
     cin >> namePath;
     string disk = "\\\\.\\" + namePath + ":";
     wstring temp = ConvertWStr(disk);
-    LPCWSTR drive = temp.c_str;
+    LPCWSTR drive = temp.c_str();
 
     ReadSector(drive, 0, sector); // ??c ? USB
     displayBootSector(sector); // Display b?ng boot sector
