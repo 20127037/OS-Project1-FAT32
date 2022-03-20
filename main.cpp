@@ -48,15 +48,10 @@ void displayBootSector(BYTE sector[512]) {
         else cout << setw(2) << setfill('0') << hex << int(sector[i]) << " ";
     }
 }
-int HexaToDecConverter(string Hexa)
-{
-    //temp
-        int result;
-        return result;
-}
+
 int main(int argc, char ** argv)
 {
-    
+    FAT32 T;
     BYTE sector[512];
     string namePath;
     cout << "Read disk: ";
@@ -64,9 +59,14 @@ int main(int argc, char ** argv)
     string disk = "\\\\.\\" + namePath + ":";
     wstring temp = ConvertWStr(disk);
     LPCWSTR drive = temp.c_str();
-
+                        
     ReadSector(drive, 0, sector); // ??c ? USB
     displayBootSector(sector); // Display b?ng boot sector
-    
+    cout << "--------------------------" << endl;
+    string res[512];
+    T.convertSectorToString(sector, res);
+    T.readInfor(res);
+    T.print();
+
     return 0;
 }

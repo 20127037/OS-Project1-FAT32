@@ -1,27 +1,15 @@
 ﻿#include "FAT32.h"
 
-wstring ConvertWStr(string temp)
-{
-	int strlength = temp.length() + 1;
-	int wstrlength = MultiByteToWideChar(CP_ACP, 0, temp.c_str(), strlength, NULL, 0);
-	wchar_t* buffer = new wchar_t[wstrlength];
-	MultiByteToWideChar(CP_ACP, 0, temp.c_str(), strlength, buffer, wstrlength);
-	wstring res(buffer);
-	delete[] buffer;
-
-	return res;
-}
-
-string FAT32::convertSectorToString(BYTE sector[512]) {
+void FAT32::convertSectorToString(BYTE sector[512], string sector_str[512]) {
     stringstream ss;
+    string result;
     for (int i = 0; i < 512; i++) {
         ss << hex << int(sector[i]);
+        result = ss.str();
+        sector_str[i] = result;
     }
-
-    string result = ss.str();
-
-    return result;
 }
+
 
 void FAT32::displayBootSector(BYTE sector[512]) {
     cout << "Offset" << setw(9) << setfill(' ') << '0';

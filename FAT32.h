@@ -21,10 +21,12 @@ private:
 	string _FAT = ""; // Offset 52 - số byte 8 - Loại FAT, là chuỗi "FAT32"
 
 public:
-	string convertSectorToString(BYTE*);
+	void convertSectorToString(BYTE*, string*);
 	void displayBootSector(BYTE*);
 	void readInfor(string*);
 	long int convertHexToDec(string);
 	long int littleEndian(string*, string, unsigned int);
 	void print();
 };
+
+wstring ConvertWStr(string temp);
