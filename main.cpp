@@ -65,5 +65,6 @@ int main(int argc, char ** argv)
     displayBootSector(sector); // Display bảng boot sector
     // Anh Dep Trai
     return 0;
+    // HELLO
 }
 // test
