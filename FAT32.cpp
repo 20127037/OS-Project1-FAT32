@@ -44,15 +44,15 @@ void FAT32::readInfor(string sector[512]) {
 }
 
 void FAT32::print() {
-    cout << "Số sector trên cluster: " << _SC << endl;
-    cout << "Số sector thuộc vùng Bootsector: " << _SB << endl;
-    cout << "Số bảng FAT: " << _NF << endl;
-    cout << "Kích thước bảng volume: " << _SV << endl;
-    cout << "Kích thước mỗi bảng FAT: " << _SF << endl;
-    cout << "Cluster bắt đầu của RDET: " << _SCOR << endl;
-    cout << "Sector chứa thông tin phụ: " << _ExtraInforSector << endl;
-    cout << "Sector chứa bản lưu của Boot Sector: " << _BackupBootSector << endl;
-    cout << "Loại FAT: " << /*_FAT*/ endl;
+    cout << dec <<"Số sector trên cluster: " << _SC << endl;
+    cout << dec << "Số sector thuộc vùng Bootsector: " << _SB << endl;
+    cout << dec << "Số bảng FAT: " << _NF << endl;
+    cout << dec << "Kích thước bảng volume: " << _SV << endl;
+    cout << dec << "Kích thước mỗi bảng FAT: " << _SF << endl;
+    cout << dec << "Cluster bắt đầu của RDET: " << _SCOR << endl;
+    cout << dec << "Sector chứa thông tin phụ: " << _ExtraInforSector << endl;
+    cout << dec << "Sector chứa bản lưu của Boot Sector: " << _BackupBootSector << endl;
+    cout << dec << "Loại FAT: " << /*_FAT*/ endl;
 }
 
 long int FAT32::convertHexToDec(string hexa) {
