@@ -1,5 +1,6 @@
 ﻿#include "FAT32.h"
 
+// Chuyển từ kiểu Byte của sector đọc từ USB thành string
 void FAT32::convertSectorToString(BYTE sector[512], string sector_str[512]) {
     stringstream ss;
     string result;
@@ -31,8 +32,9 @@ void FAT32::displayBootSector(BYTE sector[512]) {
     }
 }
 
+// Đọc thông tin từ bảng Boot Sector 
 void FAT32::readInfor(string sector[512]) {
-    _SC = littleEndian(sector, "0D", 1);
+    _SC = littleEndian(sector, "0D", 1); // (sector, offset, số byte)
     _SB = littleEndian(sector, "0E", 2);
     _NF = littleEndian(sector, "10", 1);
     _SV = littleEndian(sector, "20", 4);
@@ -52,9 +54,10 @@ void FAT32::print() {
     cout << dec << "Cluster bắt đầu của RDET: " << _SCOR << endl;
     cout << dec << "Sector chứa thông tin phụ: " << _ExtraInforSector << endl;
     cout << dec << "Sector chứa bản lưu của Boot Sector: " << _BackupBootSector << endl;
-    cout << dec << "Loại FAT: " << /*_FAT*/ endl;
+    cout << dec << "Loại FAT: " << _FAT << endl;
 }
 
+// Hàm chuyển từ Hexa thành Decimal
 long int FAT32::convertHexToDec(string hexa) {
     long int result = 0;
     result = stoi(hexa, nullptr, 16);
@@ -65,13 +68,16 @@ long int FAT32::convertHexToDec(string hexa) {
 long int FAT32::littleEndian(string sector[512], string offset, unsigned int byte) {
     string resultHex = "";
     long int resultDec = 0;
-    int pos = convertHexToDec(offset);
 
+    // Chuyển offset sang hệ 10, vị trí cần đọc chính là giá trị của offset(dec)
+    int pos = convertHexToDec(offset); 
+
+    // Dùng vòng lặp để lấy giá trị theo chiều ngược lại
     for (int i = pos + byte - 1; i >= pos; i--) {
         resultHex += sector[i];
     }
 
-    resultDec = convertHexToDec(resultHex);
+    resultDec = convertHexToDec(resultHex); // Chuyển giá trị sau khi lấy được về dạng Decimal
 
     //cout << resultHex << " (Hexa) = " << resultDec << " (Dec) " << endl;
 
