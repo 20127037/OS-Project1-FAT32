@@ -19,8 +19,23 @@ private:
 	int _ExtraInforSector = 0; // Offset 30 - số byte 2 - Sector chứa thông tin phụ (về cluster trống), thường là 1
 	int _BackupBootSector = 0; // Offset 32 - số byte 2 - Sector chứa bản sao lưu của Boot Sector
 	string _FAT = ""; // Offset 52 - số byte 8 - Loại FAT, là chuỗi "FAT32"
+	
+	long int StartingByteRDET;
 
 public:
+	long int getSC();
+	long int getSB();
+	long int getNF();
+	long int getSV();
+	long int getSF();
+	long int getSCOR();
+	long int getExtraInforSector();
+	long int getBackupBootSector();
+	string getFAT();
+
+	void setStartingByteRDET();
+	long int getStartingByteRDET();
+
 	void convertSectorToString(BYTE*, string*);
 	void displayBootSector(BYTE*);
 	void readInfor(string*);

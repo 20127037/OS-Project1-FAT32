@@ -1,4 +1,4 @@
-#include "FAT32.h"
+﻿#include "FAT32.h"
 
 int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
 {
@@ -61,12 +61,21 @@ int main(int argc, char ** argv)
     LPCWSTR drive = temp.c_str();
                         
     ReadSector(drive, 0, sector); // ??c ? USB
+
     T.displayBootSector(sector); // Display b?ng boot sector
     cout << endl <<"--------------------------" << endl;
     string res[512];
+    BYTE RDET[512];
+   
+
     T.convertSectorToString(sector, res);
     T.readInfor(res);
     T.print();
+
+    //đọc bảng fat
+    T.setStartingByteRDET();
+    ReadSector(drive, T.getStartingByteRDET(), RDET);
+    displayBootSector(RDET);
 
     return 0;
 }

@@ -46,17 +46,49 @@ void FAT32::readInfor(string sector[512]) {
 }
 
 void FAT32::print() {
-    cout << dec <<"Số sector trên cluster: " << _SC << endl;
-    cout << dec << "Số sector thuộc vùng Bootsector: " << _SB << endl;
-    cout << dec << "Số bảng FAT: " << _NF << endl;
-    cout << dec << "Kích thước bảng volume: " << _SV << endl;
-    cout << dec << "Kích thước mỗi bảng FAT: " << _SF << endl;
-    cout << dec << "Cluster bắt đầu của RDET: " << _SCOR << endl;
-    cout << dec << "Sector chứa thông tin phụ: " << _ExtraInforSector << endl;
-    cout << dec << "Sector chứa bản lưu của Boot Sector: " << _BackupBootSector << endl;
-    cout << dec << "Loại FAT: " << _FAT << endl;
+    cout << dec <<"So sector tren cluser: " << _SC << endl;
+    cout << dec << "So sector thuoc vung Bootsector: " << _SB << endl;
+    cout << dec << "So bang FAT: " << _NF << endl;
+    cout << dec << "Kich thuoc bang volume: " << _SV << endl;
+    cout << dec << "Kich thuoc moi bang FAT: " << _SF << endl;
+    cout << dec << "Cluster bat dau cua RDET: " << _SCOR << endl;
+    cout << dec << "Sector chua thong tin phu: " << _ExtraInforSector << endl;
+    cout << dec << "Sector chua ban luu cua Boot Sector: " << _BackupBootSector << endl;
+    cout << dec << "Loai FAT: " << _FAT << endl;
 }
-
+long int FAT32::getSC() {
+    return _SC;
+}
+long int FAT32::getSB() {
+    return _SB;
+}
+long int FAT32::getNF() {
+    return _NF;
+}
+long int FAT32::getSV() {
+    return _SV;
+}
+long int FAT32::getSF() {
+    return _SF;
+}
+long int FAT32::getSCOR() {
+    return _SCOR;
+}
+long int FAT32::getExtraInforSector() {
+    return _ExtraInforSector;
+}
+long int FAT32::getBackupBootSector() {
+    return _BackupBootSector;
+}
+string FAT32::getFAT() {
+    return _FAT;
+}
+void FAT32::setStartingByteRDET() {
+    StartingByteRDET = (_NF * _SF + _SB) * 512;
+}
+long int FAT32::getStartingByteRDET() {
+    return StartingByteRDET;
+}
 // Hàm chuyển từ Hexa thành Decimal
 long int FAT32::convertHexToDec(string hexa) {
     long int result = 0;
