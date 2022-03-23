@@ -121,25 +121,6 @@ long long int NTFS::littleEndian(string sector[512], string offset, unsigned int
     return resultDec;
 }
 
-string NTFS::littleEndianMTF(string sector[512], string offset, unsigned int byte) {
-    string resultHex = "";
-    long long int resultDec = 0;
-
-    // Chuyển offset sang hệ 10, vị trí cần đọc chính là giá trị của offset(dec)
-    int pos = convertHexToDec(offset);
-
-    // Dùng vòng lặp để lấy giá trị theo chiều ngược lại
-    for (int i = pos + byte - 1; i >= pos; i--) {
-        resultHex += sector[i];
-    }
-
-    resultDec = convertHexToDec(resultHex); // Chuyển giá trị sau khi lấy được về dạng Decimal
-
-    //cout << resultHex << " (Hexa) = " << resultDec << " (Dec) " << endl;
-
-    return resultHex;
-}
-
 string NTFS::ConvertHextoText(string sector[512], string offset, unsigned int byte)
 {
     int pos = convertHexToDec(offset);
@@ -154,17 +135,17 @@ string NTFS::ConvertHextoText(string sector[512], string offset, unsigned int by
 void NTFS::readInforHeaderMFT(string sector[512])
 {
     _SIG = ConvertHextoText(sector, "00", 4); // Dấu hiệu nhận biết MFT entry
-    _US = convertHexToDec(littleEndianMTF(sector, "04", 2)); // Địa chỉ (offset) của Update sequence.
-    _NF = convertHexToDec(littleEndianMTF(sector, "06", 2)); // Số phần tử của mảng Fixup
-    _LSN = convertHexToDec(littleEndianMTF(sector, "08", 8)); // $LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record).
-    _SN = convertHexToDec(littleEndianMTF(sector, "10", 2)); // Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại
-    _RC = convertHexToDec(littleEndianMTF(sector, "12", 2)); // Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó
-    _OA = littleEndianMTF(sector, "14", 2); // Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56.
-    _Flag = littleEndianMTF(sector, "16", 2); // Flags: giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định
-    _UB = convertHexToDec(littleEndianMTF(sector, "18", 4)); // Số byte trong MFT entry đã được sử dụng. Ví dụ, trong trường hợp này đã sử dụng 0x0168 = 360 byte.
-    _SD = convertHexToDec(littleEndianMTF(sector, "1C", 4)); // Kích thước vùng đĩa đã được cấp cho MFT entry, Ví dụ: 0x0400 = 1024 byte.
-    _BMS = convertHexToDec(littleEndianMTF(sector, "20", 8)); // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).
-    _NAID = convertHexToDec(littleEndianMTF(sector, "28", 2)); // Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry.
+    _US = littleEndian(sector, "04", 2); // Địa chỉ (offset) của Update sequence.
+    _NF = littleEndian(sector, "06", 2); // Số phần tử của mảng Fixup
+    _LSN = littleEndian(sector, "08", 8); // $LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record).
+    _SN = littleEndian(sector, "10", 2); // Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại
+    _RC = littleEndian(sector, "12", 2); // Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó
+    _OA = littleEndian(sector, "14", 2); // Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56.
+    _Flag = ConvertDectoHex(littleEndian(sector, "16", 2)); // Flags: giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định
+    _UB = littleEndian(sector, "18", 4); // Số byte trong MFT entry đã được sử dụng. Ví dụ, trong trường hợp này đã sử dụng 0x0168 = 360 byte.
+    _SD = littleEndian(sector, "1C", 4); // Kích thước vùng đĩa đã được cấp cho MFT entry, Ví dụ: 0x0400 = 1024 byte.
+    _BMS = littleEndian(sector, "20", 8); // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).
+    _NAID = littleEndian(sector, "28", 2); // Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry.
 }
 
 string NTFS::ConvertDectoHex(int n)
@@ -186,16 +167,16 @@ string NTFS::ConvertDectoHex(int n)
     return res;
 }
 
-void NTFS::readInfoAttribute(string sector[512], string OA) // OA - > OffsetAttribute - đọc ở phần HeaderMFT
+void NTFS::readInfoAttribute(string sector[512], int _OA) // OA - > OffsetAttribute - đọc ở phần HeaderMFT
 {
-    int start = convertHexToDec(OA); // Offset bắt đầu của Attribute
-    _TID = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start), 4)); // Mã loại của attribute (type ID)
-    _SA = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 4), 4)); // Kích thước của attribute
-    _FlagNonRes = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 8), 1)); // Cờ báo non-resident
-    _LN = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 9), 1)); // Chiều dài của tên attribute
-    _ONA = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 10), 2)); // Vị trí (offset) chứa tên của attribute
-    _VF = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 12), 2)); // Các cờ báo
-    _AID = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 14), 2));  // Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry)
-    _SC = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 16), 4)); // Kích thước phần nội dung của attribute 
-    _OCA = convertHexToDec(littleEndianMTF(sector, ConvertDectoHex(start + 20), 2)); // Nơi bắt đầu (offset) của phần nội dung attribute
+    int start = _OA; // Offset bắt đầu của Attribute
+    _TID = littleEndian(sector, ConvertDectoHex(start), 4); // Mã loại của attribute (type ID)
+    _SA = littleEndian(sector, ConvertDectoHex(start + 4), 4); // Kích thước của attribute
+    _FlagNonRes = littleEndian(sector, ConvertDectoHex(start + 8), 1); // Cờ báo non-resident
+    _LN = littleEndian(sector, ConvertDectoHex(start + 9), 1); // Chiều dài của tên attribute
+    _ONA = littleEndian(sector, ConvertDectoHex(start + 10), 2); // Vị trí (offset) chứa tên của attribute
+    _VF = littleEndian(sector, ConvertDectoHex(start + 12), 2); // Các cờ báo
+    _AID = littleEndian(sector, ConvertDectoHex(start + 14), 2);  // Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry)
+    _SC = littleEndian(sector, ConvertDectoHex(start + 16), 4); // Kích thước phần nội dung của attribute 
+    _OCA = littleEndian(sector, ConvertDectoHex(start + 20), 2); // Nơi bắt đầu (offset) của phần nội dung attribute
 }

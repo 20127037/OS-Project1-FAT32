@@ -31,7 +31,7 @@ private:
 	int _LSN = 0; // $LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record).;
 	int _SN = 0; // Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại
 	int _RC = 0; // Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó
-	string _OA = ""; // Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56.
+	int _OA = 0; // Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56.
 	string _Flag = ""; // Flags: giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định
 	int _UB = 0; // Số byte trong MFT entry đã được sử dụng. Ví dụ, trong trường hợp này đã sử dụng 0x0168 = 360 byte.
 	int _SD = 0; // Kích thước vùng đĩa đã được cấp cho MFT entry, Ví dụ: 0x0400 = 1024 byte.
@@ -63,6 +63,7 @@ public:
 
 	void setStartingByteRDET();
 	long int getStartingByteRDET();*/
+
 
 	void convertSectorToString(BYTE*, string*);
 	void displayBootSector(BYTE*);
