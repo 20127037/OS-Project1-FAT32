@@ -35,30 +35,33 @@ int main(int argc, char ** argv)
     //T.displayBootSector(sector); // Display b?ng boot sector
     
     cout << endl <<"--------------------------" << endl;
-    /*string res[512];
-    BYTE RDET[512];*/
-   
-
-    /*T.convertSectorToString(sector, res,512);
-    T.readInfor(res);
-    T.print();
-    vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive);*/
-    //vector<byte> rdetData = byteArray(volume, rdetClusters);
-    //đọc bảng fat
-    /*T.setStartingByteRDET();
-    ReadSector(drive, T.getStartingByteRDET(), RDET);
-   displayBootSector(RDET);*/
-
-    NTFS N;
     string res[512];
     BYTE RDET[512];
-    N.displayBootSector(sector);
-    N.convertSectorToString(sector, res);
-    //N.readInfor(res);
-    //N.print();
-    cout << endl << endl;
-    N.readInforHeaderMFT(res);
-    N.printHeaderMFT();
+   
+
+    T.convertSectorToString(sector, res,512);
+    T.readInfor(res);
+    T.print();
+    vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
+    vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
+
+    EntryRdet(rdetData);
+    //ReadEntries(0, 0, rdetData, true, volume, txtFiles);
+    //đọc bảng fat
+   // /*T.setStartingByteRDET();
+   // ReadSector(drive, T.getStartingByteRDET(), RDET);
+   //displayBootSector(RDET);*/
+
+    //NTFS N;
+    //string res[512];
+    //BYTE RDET[512];
+    //N.displayBootSector(sector);
+    //N.convertSectorToString(sector, res);
+    ////N.readInfor(res);
+    ////N.print();
+    //cout << endl << endl;
+    //N.readInforHeaderMFT(res);
+    //N.printHeaderMFT();
     
 
     return 0;

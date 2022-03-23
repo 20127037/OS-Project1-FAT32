@@ -78,3 +78,36 @@ vector<int> clusterArray(FAT32 T, int start, LPCWSTR drive) {//cluser
 	return result;
 }
 //void ReadEntries(int start, int tab, )
+
+vector<byte> byteArray(FAT32 T, vector<int> clusterArray, LPCWSTR drive)
+{
+	vector<BYTE> ByteArray;
+	//Duyệt mảng các cluster
+	for (int i = 0; i < clusterArray.size(); i++)
+	{
+		int offsetStart = (T.getSB() + T.getNF() * T.getSF() + (clusterArray[i] - 2) * T.getSC()) * T.getBP();
+	
+		int sizeCluster = T.getBP() * T.getSC();
+		BYTE* cluster = new BYTE[sizeCluster];
+
+		ReadSector(drive, offsetStart, cluster, sizeCluster);
+
+		for (int j = 0; j < sizeCluster; j++)
+		{
+			ByteArray.push_back(cluster[j]);
+		}
+	}
+	return ByteArray;
+}
+void EntryRdet(vector<BYTE> entry) {
+	cout << endl;
+	for (int i = 0; i < entry.size(); i++)
+	{
+		if (i % 16 == 0)
+		{
+			cout << endl;
+			cout << entry[i] << " ";
+		}
+		else cout << entry[i] << " ";
+	}
+}

@@ -52,3 +52,6 @@ public:
 
 wstring ConvertWStr(string temp);
 vector<int> clusterArray(FAT32 T, int start, LPCWSTR drive);
+
+vector<byte> byteArray(FAT32 T, vector<int> clusterArray, LPCWSTR drive);
+void EntryRdet(vector<BYTE> entry);
