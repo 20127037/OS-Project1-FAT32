@@ -1,10 +1,10 @@
 ﻿#include "FAT32.h"
 
 // Chuyển từ kiểu Byte của sector đọc từ USB thành string
-void FAT32::convertSectorToString(BYTE sector[512], string sector_str[512]) {
+void FAT32::convertSectorToString(BYTE* sector, string* sector_str,int size) {
     stringstream ss;
     string result;
-    for (int i = 0; i < 512; i++) {
+    for (int i = 0; i < size; i++) {
         ss.str("");
         ss.clear();
         ss << hex << int(sector[i]);
@@ -34,6 +34,7 @@ void FAT32::displayBootSector(BYTE sector[512]) {
 
 // Đọc thông tin từ bảng Boot Sector 
 void FAT32::readInfor(string sector[512]) {
+    _BP = littleEndian(sector, "0B", 2); // Offset B - số byte 2 - Số byte mỗi sector
     _SC = littleEndian(sector, "0D", 1); // (sector, offset, số byte)
     _SB = littleEndian(sector, "0E", 2);
     _NF = littleEndian(sector, "10", 1);
@@ -46,6 +47,7 @@ void FAT32::readInfor(string sector[512]) {
 }
 
 void FAT32::print() {
+    cout << dec << "So byte moi sector: " << _BP << endl;
     cout << dec <<"So sector tren cluser: " << _SC << endl;
     cout << dec << "So sector thuoc vung Bootsector: " << _SB << endl;
     cout << dec << "So bang FAT: " << _NF << endl;
@@ -55,7 +57,13 @@ void FAT32::print() {
     cout << dec << "Sector chua thong tin phu: " << _ExtraInforSector << endl;
     cout << dec << "Sector chua ban luu cua Boot Sector: " << _BackupBootSector << endl;
     cout << dec << "Loai FAT: " << _FAT << endl;
+
 }
+long int FAT32::getBP() {
+    return _BP;
+}
+
+
 long int FAT32::getSC() {
     return _SC;
 }
@@ -106,6 +114,9 @@ long int FAT32::littleEndian(string sector[512], string offset, unsigned int byt
 
     // Dùng vòng lặp để lấy giá trị theo chiều ngược lại
     for (int i = pos + byte - 1; i >= pos; i--) {
+        if (sector[i] == "0")
+            resultHex += "00";
+        else
         resultHex += sector[i];
     }
 

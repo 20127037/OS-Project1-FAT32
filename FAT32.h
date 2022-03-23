@@ -8,8 +8,12 @@
 #include <Windows.h>
 using namespace std;
 
+int ReadSector(LPCWSTR  drive, int readPoint, BYTE* sector, int bytes);
+
+
 class FAT32 {
 private:
+	int _BP = 0; // Offset B - số byte 2 - Số byte mỗi sector
 	int _SC = 0; // Offset 0D - số byte 1 - Số sector trên cluster 
 	int _SB = 0; // Offset 0E - số byte 2 - Số sector thuộc vừng Bootsector 
 	int _NF = 0; // Offset 10 - số byte 1 - Số bảng FAT, thường là 2 
@@ -23,6 +27,8 @@ private:
 	long int StartingByteRDET;
 
 public:
+	long int getBP();
+
 	long int getSC();
 	long int getSB();
 	long int getNF();
@@ -36,7 +42,7 @@ public:
 	void setStartingByteRDET();
 	long int getStartingByteRDET();
 
-	void convertSectorToString(BYTE*, string*);
+	void convertSectorToString(BYTE*, string*, int );
 	void displayBootSector(BYTE*);
 	void readInfor(string*);
 	long int convertHexToDec(string);
@@ -45,3 +51,4 @@ public:
 };
 
 wstring ConvertWStr(string temp);
+vector<int> clusterArray(FAT32 T, int start, LPCWSTR drive);
