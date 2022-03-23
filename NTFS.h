@@ -63,17 +63,17 @@ public:
 
 	void setStartingByteRDET();
 	long int getStartingByteRDET();*/
-
+	int getOA();
 
 	void convertSectorToString(BYTE*, string*);
 	void displayBootSector(BYTE*);
 	void readInfor(string*);
-	long long int convertHexToDec(string);
+	long int convertHexToDec(string);
 	long long int littleEndian(string*, string, unsigned int);
 	string ConvertHextoText(string*, string, unsigned int);
 	void readInforHeaderMFT(string*);
 	string ConvertDectoHex(int);
-	void readInfoAttribute(string*, string);
+	void readInfoAttribute(string*, int);
 	string littleEndianMTF(string*, string, unsigned int);
 	void print();
 };

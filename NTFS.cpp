@@ -95,7 +95,7 @@ void NTFS::print() {
 //    return StartingByteRDET;
 //}
 // Hàm chuyển từ Hexa thành Decimal
-long long int NTFS::convertHexToDec(string hexa) {
+long int NTFS::convertHexToDec(string hexa) {
     long long int result = 0;
     result = stoi(hexa, nullptr, 16);
 
@@ -125,7 +125,7 @@ string NTFS::ConvertHextoText(string sector[512], string offset, unsigned int by
 {
     int pos = convertHexToDec(offset);
     string resultHex = "";
-    for (int i = pos; i < byte; i++) 
+    for (int i = pos; i < byte; i++)
         resultHex += (char)convertHexToDec(sector[i]);
 
     return resultHex;
@@ -137,7 +137,7 @@ void NTFS::readInforHeaderMFT(string sector[512])
     _SIG = ConvertHextoText(sector, "00", 4); // Dấu hiệu nhận biết MFT entry
     _US = littleEndian(sector, "04", 2); // Địa chỉ (offset) của Update sequence.
     _NF = littleEndian(sector, "06", 2); // Số phần tử của mảng Fixup
-    _LSN = littleEndian(sector, "08", 8); // $LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record).
+    //_LSN = littleEndian(sector, "08", 8); // $LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record).
     _SN = littleEndian(sector, "10", 2); // Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại
     _RC = littleEndian(sector, "12", 2); // Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó
     _OA = littleEndian(sector, "14", 2); // Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56.
@@ -179,4 +179,8 @@ void NTFS::readInfoAttribute(string sector[512], int _OA) // OA - > OffsetAttrib
     _AID = littleEndian(sector, ConvertDectoHex(start + 14), 2);  // Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry)
     _SC = littleEndian(sector, ConvertDectoHex(start + 16), 4); // Kích thước phần nội dung của attribute 
     _OCA = littleEndian(sector, ConvertDectoHex(start + 20), 2); // Nơi bắt đầu (offset) của phần nội dung attribute
+}
+
+int NTFS::getOA() {
+    return _OA;
 }
