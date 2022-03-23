@@ -25,6 +25,30 @@ private:
 	//long long _VolumeSerialNumber = 0; // Offset 48 - số byte 8 - số seri của ổ đĩa (volume seria number)
 
 	// HEADER MFT
+	string _SIG = ""; // Dấu hiệu nhận biết MFT entry
+	int _US = 0; // Địa chỉ (offset) của Update sequence.
+	int _NF = 0; // Số phần tử của mảng Fixup
+	int _LSN = 0; // $LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record).;
+	int _SN = 0; // Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại
+	int _RC = 0; // Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó
+	string _OA = ""; // Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56.
+	string _Flag = ""; // Flags: giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định
+	int _UB = 0; // Số byte trong MFT entry đã được sử dụng. Ví dụ, trong trường hợp này đã sử dụng 0x0168 = 360 byte.
+	int _SD = 0; // Kích thước vùng đĩa đã được cấp cho MFT entry, Ví dụ: 0x0400 = 1024 byte.
+	int _BMS = 0 // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).;
+	int _NAID = ; // Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry.0;
+
+	// HEADER ATTRIBUTE
+	int _startA = 0; // Offset bắt đầu của Attribute
+	int _TID = 0; // Mã loại của attribute (type ID)
+	int _SA = 0; // Kích thước của attribute
+	int _FlagNonRes = 0; // Cờ báo non-resident
+	int _LN = 0; // Chiều dài của tên attribute
+	int _ONA = 0; // Vị trí (offset) chứa tên của attribute
+	int _VF = 0; // Các cờ báo
+	int _AID = 0;  // Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry)
+	int _SC = 0; // Kích thước phần nội dung của attribute 
+	int _OCA = 0; // Nơi bắt đầu (offset) của phần nội dung attribute
 
 public:
 	/*long int getSC();
