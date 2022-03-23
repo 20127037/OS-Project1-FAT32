@@ -35,8 +35,8 @@ private:
 	string _Flag = ""; // Flags: giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định
 	int _UB = 0; // Số byte trong MFT entry đã được sử dụng. Ví dụ, trong trường hợp này đã sử dụng 0x0168 = 360 byte.
 	int _SD = 0; // Kích thước vùng đĩa đã được cấp cho MFT entry, Ví dụ: 0x0400 = 1024 byte.
-	int _BMS = 0 // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).;
-	int _NAID = ; // Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry.0;
+	int _BMS = 0; // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).;
+	int _NAID = 0; // Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry.0;
 
 	// HEADER ATTRIBUTE
 	int _startA = 0; // Offset bắt đầu của Attribute
@@ -69,10 +69,11 @@ public:
 	void readInfor(string*);
 	long long int convertHexToDec(string);
 	long long int littleEndian(string*, string, unsigned int);
-	void ConvertHextoText(string*, string, unsigned int);
+	string ConvertHextoText(string*, string, unsigned int);
 	void readInforHeaderMFT(string*);
 	string ConvertDectoHex(int);
 	void readInfoAttribute(string*, string);
+	string littleEndianMTF(string*, string, unsigned int);
 	void print();
 };
 
