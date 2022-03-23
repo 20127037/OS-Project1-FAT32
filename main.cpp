@@ -1,5 +1,4 @@
 ﻿#include "FAT32.h"
-#include "NTFS.h"
 
 int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
 {
@@ -50,10 +49,9 @@ void displayBootSector(BYTE sector[512]) {
     }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char ** argv)
 {
     FAT32 T;
-    NTFS N;
     BYTE sector[512];
     string namePath;
     cout << "Read disk: ";
@@ -61,40 +59,23 @@ int main(int argc, char** argv)
     string disk = "\\\\.\\" + namePath + ":";
     wstring temp = ConvertWStr(disk);
     LPCWSTR drive = temp.c_str();
-
+                        
     ReadSector(drive, 0, sector); // ??c ? USB
 
-    //T.displayBootSector(sector); // Display b?ng boot sector
-   /* cout << endl << "--------------------------" << endl;
+    T.displayBootSector(sector); // Display b?ng boot sector
+    cout << endl <<"--------------------------" << endl;
     string res[512];
     BYTE RDET[512];
-
+   
 
     T.convertSectorToString(sector, res);
     T.readInfor(res);
-    T.print();*/
+    T.print();
 
     //đọc bảng fat
-   /* T.setStartingByteRDET();
+    T.setStartingByteRDET();
     ReadSector(drive, T.getStartingByteRDET(), RDET);
-    displayBootSector(RDET);*/
-
-    // -------------------------------------------------------------------------------------------
-    // NTFS //
-    N.displayBootSector(sector);
-    string res[512];
-    //BYTE RDET[512];
-
-
-
-    N.convertSectorToString(sector, res);
-    N.readInfor(res);
-    cout << endl << endl;
-    N.print();
-
-    N.readInforHeaderMFT(res);
-    N.readInfoAttribute(res, N.getOA());
-
+    displayBootSector(RDET);
 
     return 0;
 }

@@ -181,6 +181,35 @@ void NTFS::readInfoAttribute(string sector[512], int _OA) // OA - > OffsetAttrib
     _OCA = littleEndian(sector, ConvertDectoHex(start + 20), 2); // Nơi bắt đầu (offset) của phần nội dung attribute
 }
 
-int NTFS::getOA() {
+int NTFS::getOA() 
+{
     return _OA;
 }
+
+void NTFS::printHeaderMFT()
+{
+    cout << "Dấu hiệu nhận biết MFT entry: " << _SIG << endl;
+    cout << "Địa chỉ (offset) của Update sequence: " << dec << _US << endl;
+    cout << "Số phần tử của mảng Fixup: " << dec << _NF << endl;
+    //cout << "$LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record): " << dec << _LSN << endl;
+    cout << "Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại: " << dec << _SN << endl;
+    cout << "Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó: " << dec << _RC << endl;
+    cout << "Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56: " << dec << _OA << endl;
+    cout << "Flags: " << dec << _Flag << " (giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định)" << endl;
+    cout << "Số byte trong MFT entry đã được sử dụng: " << dec << _UB << endl;
+    cout << "Kích thước vùng đĩa đã được cấp cho MFT entry: " << dec << _SD << endl;
+    cout << "Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record): " << dec << _BMS << endl;
+    cout << "Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry: " << dec << _NAID << endl;
+}
+
+void NTFS::printHeaderAttribute()
+{
+    cout << dec << "Mã loại của attribute (type ID): " << _TID << endl;
+    cout << dec << "Kích thước của attribute: " << _SA << endl;
+    cout << dec << "Cờ báo non-resident: " << _FlagNonRes << endl;
+    cout << dec << "Chiều dài của tên attribute: " << _LN << endl;
+    cout << dec << "Vị trí (offset) chứa tên của attribute: " << _ONA << endl;
+    cout << dec << "Các cờ báo: " << _VF << endl;
+    cout << dec << "Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry): " << _AID << endl;
+    cout << dec << "Kích thước phần nội dung của attribute : " << _SC << endl;
+    cout << dec << "Nơi bắt đầu (offset) của phần nội dung attribute: " << _OCA << endl;
