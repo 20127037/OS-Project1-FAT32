@@ -95,7 +95,7 @@ void NTFS::print() {
 //    return StartingByteRDET;
 //}
 // Hàm chuyển từ Hexa thành Decimal
-long int NTFS::convertHexToDec(string hexa) {
+long long int NTFS::convertHexToDec(string hexa) {
     long long int result = 0;
     result = stoi(hexa, nullptr, 16);
 
@@ -111,7 +111,10 @@ long long int NTFS::littleEndian(string sector[512], string offset, unsigned int
 
     // Dùng vòng lặp để lấy giá trị theo chiều ngược lại
     for (int i = pos + byte - 1; i >= pos; i--) {
-        resultHex += sector[i];
+        if (sector[i] == "0")
+            resultHex += "00";
+        else
+            resultHex += sector[i];
     }
 
     resultDec = convertHexToDec(resultHex); // Chuyển giá trị sau khi lấy được về dạng Decimal
@@ -144,26 +147,19 @@ void NTFS::readInforHeaderMFT(string sector[512])
     _Flag = ConvertDectoHex(littleEndian(sector, "16", 2)); // Flags: giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định
     _UB = littleEndian(sector, "18", 4); // Số byte trong MFT entry đã được sử dụng. Ví dụ, trong trường hợp này đã sử dụng 0x0168 = 360 byte.
     _SD = littleEndian(sector, "1C", 4); // Kích thước vùng đĩa đã được cấp cho MFT entry, Ví dụ: 0x0400 = 1024 byte.
-    _BMS = littleEndian(sector, "20", 8); // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).
+    //_BMS = littleEndian(sector, "20", 8); // Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record).
     _NAID = littleEndian(sector, "28", 2); // Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry.
 }
 
 string NTFS::ConvertDectoHex(int n)
 {
-    int a = 0;
-    char chr[17] = "0123456789ABCDEF";
-    string str = "";
     string res = "";
-    while (n > 10)
-    {
-        if (n <= 10)
-            a = n;
-        str += chr[n % 16];
-        n /= 16;
-    }
-    res += chr[a];
-    for (int i = str.length(); i >= 0; i--)
-        res += str[i];
+    stringstream ss;
+
+    ss << hex << n;
+
+    res = ss.str();
+
     return res;
 }
 
@@ -202,8 +198,7 @@ void NTFS::printHeaderMFT()
     cout << "Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry: " << dec << _NAID << endl;
 }
 
-void NTFS::printHeaderAttribute()
-{
+void NTFS::printHeaderAttribute() {
     cout << dec << "Mã loại của attribute (type ID): " << _TID << endl;
     cout << dec << "Kích thước của attribute: " << _SA << endl;
     cout << dec << "Cờ báo non-resident: " << _FlagNonRes << endl;
@@ -213,3 +208,4 @@ void NTFS::printHeaderAttribute()
     cout << dec << "Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry): " << _AID << endl;
     cout << dec << "Kích thước phần nội dung của attribute : " << _SC << endl;
     cout << dec << "Nơi bắt đầu (offset) của phần nội dung attribute: " << _OCA << endl;
+}

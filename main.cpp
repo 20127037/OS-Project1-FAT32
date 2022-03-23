@@ -1,5 +1,5 @@
 ﻿#include "FAT32.h"
-
+#include "NTFS.h"
 
 void displayBootSector(BYTE* sector, int size) {
     cout << "Offset" << setw(9) << setfill(' ') << '0';
@@ -32,21 +32,34 @@ int main(int argc, char ** argv)
                         
     ReadSector(drive, 0, sector, 512); // ??c ? USB
 
-    T.displayBootSector(sector); // Display b?ng boot sector
+    //T.displayBootSector(sector); // Display b?ng boot sector
+    
     cout << endl <<"--------------------------" << endl;
-    string res[512];
-    BYTE RDET[512];
+    /*string res[512];
+    BYTE RDET[512];*/
    
 
-    T.convertSectorToString(sector, res,512);
+    /*T.convertSectorToString(sector, res,512);
     T.readInfor(res);
     T.print();
-    vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive);
+    vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive);*/
     //vector<byte> rdetData = byteArray(volume, rdetClusters);
     //đọc bảng fat
     /*T.setStartingByteRDET();
     ReadSector(drive, T.getStartingByteRDET(), RDET);
    displayBootSector(RDET);*/
+
+    NTFS N;
+    string res[512];
+    BYTE RDET[512];
+    N.displayBootSector(sector);
+    N.convertSectorToString(sector, res);
+    //N.readInfor(res);
+    //N.print();
+    cout << endl << endl;
+    N.readInforHeaderMFT(res);
+    N.printHeaderMFT();
+    
 
     return 0;
 }
