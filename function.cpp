@@ -124,7 +124,7 @@ string ConvertHextoText(string sector[512], string offset, unsigned int byte)
 {
 	int pos = convertHexToDec(offset);
 	string resultHex = "";
-	for (int i = pos; i < byte; i++)
+	for (int i = pos; i < pos + byte; i++)
 		resultHex += (char)convertHexToDec(sector[i]);
 
 	return resultHex;

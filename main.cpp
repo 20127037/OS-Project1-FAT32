@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
     ReadSector(drive, 0, sector, 512); // ??c ? USB
 
-   
+
 
     cout << endl << "--------------------------" << endl;
     string res[512];
@@ -41,28 +41,26 @@ int main(int argc, char** argv)
 
 
     T.convertSectorToString(sector, res, 512);
-    string ntfs = ConvertHextoText(res, "03", 8); // kiểm tra NTFS
 
+    string ntfs = ConvertHextoText(res, "03", 8); // kiểm tra NTFS
     string type = ConvertHextoText(res, "52", 8); // ktra có phải FAT32 ko?
-    cout << "--" << type;
-    if (type == "FAT32 ")
+    
+    if (type == "FAT32   ") // Xuất  FAT32
     {
-        // Xuất  FAT32
-        T.displayBootSector(sector); // Display b?ng boot sector
+        T.displayBootSector(sector); // Display bảng boot sector
         T.readInfor(res);
         T.print();
     }
-    else if (ntfs == "NTFS ")
+    else if (ntfs == "NTFS    ") // Xuất NTFS
     {
-        // Xuất NTFS
         N.displayBootSector(sector);
         cout << endl << "----------------------------------------" << endl;
         //N.convertSectorToString(sector, res);
         N.readInfor(res);
         N.print();
+        cout << endl << "----------------------------------------" << endl;
     }
-    else
-        cout << "\nDay khong phai FAT32 hay NTFS. Vui long kiem tra lai o dia doc.";
+    else cout << "\nDay khong phai FAT32 hay NTFS. Vui long kiem tra lai o dia doc.";
 
     //vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
     //vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);

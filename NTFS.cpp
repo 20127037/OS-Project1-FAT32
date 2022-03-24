@@ -1,6 +1,5 @@
 ﻿#include "NTFS.h"
 
-
 // Chuyển từ kiểu Byte của sector đọc từ USB thành string
 void NTFS::convertSectorToString(BYTE sector[512], string sector_str[512]) {
     stringstream ss;

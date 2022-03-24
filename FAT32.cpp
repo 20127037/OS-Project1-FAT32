@@ -43,7 +43,6 @@ void FAT32::readInfor(string sector[512]) {
     _SCOR = littleEndian(sector, "2C", 4);
     _ExtraInforSector = littleEndian(sector, "30", 2);
     _BackupBootSector = littleEndian(sector, "32", 2);
-    _FAT = littleEndian(sector, "15", 1);
 }
 
 void FAT32::print() {
@@ -56,9 +55,8 @@ void FAT32::print() {
     cout << dec << "Cluster bat dau cua RDET: " << _SCOR << endl;
     cout << dec << "Sector chua thong tin phu: " << _ExtraInforSector << endl;
     cout << dec << "Sector chua ban luu cua Boot Sector: " << _BackupBootSector << endl;
-    cout << dec << "Loai FAT: " << _FAT << endl;
-
 }
+
 long int FAT32::getBP() {
     return _BP;
 }
@@ -88,9 +86,7 @@ long int FAT32::getExtraInforSector() {
 long int FAT32::getBackupBootSector() {
     return _BackupBootSector;
 }
-string FAT32::getFAT() {
-    return _FAT;
-}
+
 void FAT32::setStartingByteRDET() {
     StartingByteRDET = (_NF * _SF + _SB) * 512;
 }

@@ -23,7 +23,6 @@ private:
 	int _SCOR = 0; // Offset 2C - số byte 4 - Cluster bắt đầu của RDET
 	int _ExtraInforSector = 0; // Offset 30 - số byte 2 - Sector chứa thông tin phụ (về cluster trống), thường là 1
 	int _BackupBootSector = 0; // Offset 32 - số byte 2 - Sector chứa bản sao lưu của Boot Sector
-	string _FAT = ""; // Offset 52 - số byte 8 - Loại FAT, là chuỗi "FAT32"
 	
 	long int StartingByteRDET;
 
@@ -38,7 +37,6 @@ public:
 	long int getSCOR();
 	long int getExtraInforSector();
 	long int getBackupBootSector();
-	string getFAT();
 
 	void setStartingByteRDET();
 	long int getStartingByteRDET();
