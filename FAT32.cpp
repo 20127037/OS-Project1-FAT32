@@ -1,7 +1,7 @@
 ﻿#include "FAT32.h"
 
 // Chuyển từ kiểu Byte của sector đọc từ USB thành string
-void FAT32::convertSectorToString(BYTE* sector, string* sector_str,int size) {
+void FAT32::convertSectorToString(BYTE* sector, string* sector_str, int size) {
     stringstream ss;
     string result;
     for (int i = 0; i < size; i++) {
@@ -47,15 +47,15 @@ void FAT32::readInfor(string sector[512]) {
 }
 
 void FAT32::print() {
-    cout << dec << "So byte moi sector: " << _BP << endl;
-    cout << dec <<"So sector tren cluser: " << _SC << endl;
-    cout << dec << "So sector thuoc vung Bootsector: " << _SB << endl;
-    cout << dec << "So bang FAT: " << _NF << endl;
-    cout << dec << "Kich thuoc bang volume: " << _SV << endl;
-    cout << dec << "Kich thuoc moi bang FAT: " << _SF << endl;
-    cout << dec << "Cluster bat dau cua RDET: " << _SCOR << endl;
-    cout << dec << "Sector chua thong tin phu: " << _ExtraInforSector << endl;
-    cout << dec << "Sector chua ban luu cua Boot Sector: " << _BackupBootSector << endl;
+    cout << dec << "Bytes per sector: " << _BP << endl;
+    cout << dec << "Sectors per cluster: " << _SC << endl;
+    cout << dec << "Reserved sectors: " << _SB << endl;
+    cout << dec << "Number of FATs: " << _NF << endl;
+    cout << dec << "Size of volume: " << _SV << endl;
+    cout << dec << "Sectors per FAT: " << _SF << endl;
+    cout << dec << "Root cluster: " << _SCOR << endl;
+    cout << dec << "System Information: " << _ExtraInforSector << endl;
+    cout << dec << "Backup Boot sector: " << _BackupBootSector << endl;
     cout << dec << "Loai FAT: " << _FAT << endl;
 
 }
@@ -110,14 +110,14 @@ long int FAT32::littleEndian(string sector[512], string offset, unsigned int byt
     long int resultDec = 0;
 
     // Chuyển offset sang hệ 10, vị trí cần đọc chính là giá trị của offset(dec)
-    int pos = convertHexToDec(offset); 
+    int pos = convertHexToDec(offset);
 
     // Dùng vòng lặp để lấy giá trị theo chiều ngược lại
     for (int i = pos + byte - 1; i >= pos; i--) {
         if (sector[i] == "0")
             resultHex += "00";
         else
-        resultHex += sector[i];
+            resultHex += sector[i];
     }
 
     resultDec = convertHexToDec(resultHex); // Chuyển giá trị sau khi lấy được về dạng Decimal

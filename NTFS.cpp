@@ -33,6 +33,7 @@ void NTFS::displayBootSector(BYTE sector[512]) {
 
 // Đọc thông tin từ bảng Boot Sector 
 void NTFS::readInfor(string sector[512]) {
+    _OEMID = ConvertHextoText(sector, "03", 8);
     _BytesPerSector = littleEndian(sector, "0B", 2); // (sector, offset, số byte)
     _SectorsPerCluster = littleEndian(sector, "0D", 1);
     _MediaDescriptor = littleEndian(sector, "15", 1);
@@ -44,56 +45,23 @@ void NTFS::readInfor(string sector[512]) {
     _LogicalClusterNumberforMFTMirror = littleEndian(sector, "38", 8);
     _ClustersPerFileRecordSegment = littleEndian(sector, "40", 1);
     _ClustersPerIndexBuffer = littleEndian(sector, "44", 1);
-    //_VolumeSerialNumber = littleEndian(sector, "48", 8);
 }
 
 void NTFS::print() {
-    cout << dec << "Kích thước 1 sector	(Đơn vị Byte): " << _BytesPerSector << endl;
-    cout << dec << "Số sector trong 1 cluster: " << _SectorsPerCluster << endl;
-    cout << dec << "Mã xác định loại đĩa: " << _MediaDescriptor << endl;
-    cout << dec << "Số sector/track: " << _SectorsPerTrack << endl;
-    cout << dec << "Số mặt đĩa (head hay side): " << _NumberOfHeads << endl;
-    cout << dec << "Số sector bắt đầu của ổ đĩa logic: " << _HiddenSectors << endl;
-    cout << dec << "Số sector của ổ đĩa logic: " << _TotalsSectors << endl;
-    cout << dec << "Cluster bắt đầu của MFT: " << _LogicalClusterNumberforMFT << endl;
-    cout << dec << "Cluster bắt đầu của MFT dự phòng (MFTMirror): " << _LogicalClusterNumberforMFTMirror << endl;
-    cout << dec << "Kích thước của một bản ghi trong MFT (MFT entry), đơn vị tính là byte: " << _ClustersPerFileRecordSegment << endl;
-    cout << dec << "Số cluster của Index Buffer: " << _ClustersPerIndexBuffer << endl;
-    //cout << dec << "số seri của ổ đĩa (volume seria number): " << _VolumeSerialNumber << endl;
+    cout << "OEM ID: " << _OEMID << endl;
+    cout << dec << "Bytes per sector: " << _BytesPerSector << endl;
+    cout << dec << "Sectors per cluster: " << _SectorsPerCluster << endl;
+    cout << dec << "Media Descriptor: " << _MediaDescriptor << endl;
+    cout << dec << "Sectors Per Track: " << _SectorsPerTrack << endl;
+    cout << dec << "Number Of Heads: " << _NumberOfHeads << endl;
+    cout << dec << "Hidden Sectors: " << _HiddenSectors << endl;
+    cout << dec << "Totals Sectors: " << _TotalsSectors << endl;
+    cout << dec << "Logical Cluster Number for MFT: " << _LogicalClusterNumberforMFT << endl;
+    cout << dec << "Logical Cluster Number for MFT Mirror: " << _LogicalClusterNumberforMFTMirror << endl;
+    cout << dec << "Clusters Per File Record Segment (Byte): " << _ClustersPerFileRecordSegment << endl;
+    cout << dec << "Clusters Per Index Buffer: " << _ClustersPerIndexBuffer << endl;
 }
-//long int NTFS::getSC() {
-//    return _SC;
-//}
-//long int NTFS::getSB() {
-//    return _SB;
-//}
-//long int NTFS::getNF() {
-//    return _NF;
-//}
-//long int NTFS::getSV() {
-//    return _SV;
-//}
-//long int NTFS::getSF() {
-//    return _SF;
-//}
-//long int NTFS::getSCOR() {
-//    return _SCOR;
-//}
-//long int NTFS::getExtraInforSector() {
-//    return _ExtraInforSector;
-//}
-//long int NTFS::getBackupBootSector() {
-//    return _BackupBootSector;
-//}
-//string NTFS::getFAT() {
-//    return _FAT;
-//}
-//void NTFS::setStartingByteRDET() {
-//    StartingByteRDET = (_NF * _SF + _SB) * 512;
-//}
-//long int NTFS::getStartingByteRDET() {
-//    return StartingByteRDET;
-//}
+
 // Hàm chuyển từ Hexa thành Decimal
 long long int NTFS::convertHexToDec(string hexa) {
     long long int result = 0;
@@ -177,7 +145,7 @@ void NTFS::readInfoAttribute(string sector[512], int _OA) // OA - > OffsetAttrib
     _OCA = littleEndian(sector, ConvertDectoHex(start + 20), 2); // Nơi bắt đầu (offset) của phần nội dung attribute
 }
 
-int NTFS::getOA() 
+int NTFS::getOA()
 {
     return _OA;
 }

@@ -8,7 +8,7 @@ void displayBootSector(BYTE* sector, int size) {
         if ((i + 1) % 8 == 0) cout << "   ";
         cout << setw(3) << setfill(' ') << hex << i + 1;
     }
-    for (int i = 0; i < size ; i++) {
+    for (int i = 0; i < size; i++) {
         if (i % 8 == 0 and i % 16 != 0) cout << "   ";
         if (i % 16 == 0) {
             cout << endl;
@@ -19,7 +19,7 @@ void displayBootSector(BYTE* sector, int size) {
     }
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
     FAT32 T;
     BYTE sector[512];
@@ -29,40 +29,41 @@ int main(int argc, char ** argv)
     string disk = "\\\\.\\" + namePath + ":";
     wstring temp = ConvertWStr(disk);
     LPCWSTR drive = temp.c_str();
-                        
+
     ReadSector(drive, 0, sector, 512); // ??c ? USB
 
-    //T.displayBootSector(sector); // Display b?ng boot sector
-    
-    cout << endl <<"--------------------------" << endl;
+    T.displayBootSector(sector); // Display b?ng boot sector
+
+    cout << endl << "--------------------------" << endl;
     string res[512];
     BYTE RDET[512];
-   
 
-    T.convertSectorToString(sector, res,512);
+
+    T.convertSectorToString(sector, res, 512);
     T.readInfor(res);
     T.print();
-    vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
-    vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
+    //vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
+    //vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
 
-    EntryRdet(rdetData);
+    //EntryRdet(rdetData);
     //ReadEntries(0, 0, rdetData, true, volume, txtFiles);
     //đọc bảng fat
    // /*T.setStartingByteRDET();
    // ReadSector(drive, T.getStartingByteRDET(), RDET);
    //displayBootSector(RDET);*/
 
-    //NTFS N;
-    //string res[512];
-    //BYTE RDET[512];
-    //N.displayBootSector(sector);
-    //N.convertSectorToString(sector, res);
-    ////N.readInfor(res);
-    ////N.print();
-    //cout << endl << endl;
-    //N.readInforHeaderMFT(res);
-    //N.printHeaderMFT();
-    
+ //NTFS N;
+ //string res[512];
+ ////BYTE RDET[512];
+ //N.displayBootSector(sector);
+ //cout << endl;
+ //N.convertSectorToString(sector, res);
+ //N.readInfor(res);
+ //N.print();
+ //cout << endl << endl;
+/*  N.readInforHeaderMFT(res);
+  N.printHeaderMFT();*/
+
 
     return 0;
 }
