@@ -34,7 +34,6 @@ void NTFS::displayBootSector(BYTE sector[512]) {
 
 // Đọc thông tin từ bảng Boot Sector 
 void NTFS::readInfor(string sector[512]) {
-    _OEMID = ConvertHextoText(sector, "03", 8);
     _BytesPerSector = littleEndian(sector, "0B", 2); // (sector, offset, số byte)
     _SectorsPerCluster = littleEndian(sector, "0D", 1);
     _MediaDescriptor = littleEndian(sector, "15", 1);
@@ -49,7 +48,6 @@ void NTFS::readInfor(string sector[512]) {
 }
 
 void NTFS::print() {
-    cout << "OEM ID: " << _OEMID << endl;
     cout << dec << "Bytes per sector: " << _BytesPerSector << endl;
     cout << dec << "Sectors per cluster: " << _SectorsPerCluster << endl;
     cout << dec << "Media Descriptor: " << _MediaDescriptor << endl;
