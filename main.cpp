@@ -42,10 +42,10 @@ int main(int argc, char** argv)
 
     T.convertSectorToString(sector, res, 512);
     string ntfs = ConvertHextoText(res, "03", 8); // kiểm tra NTFS
-    cout << ntfs;
 
-    string type = ConvertHextoText(res, "52", 5); // ktra có phải FAT32 ko?
-    if (type == "FAT32")
+    string type = ConvertHextoText(res, "52", 8); // ktra có phải FAT32 ko?
+    cout << "--" << type;
+    if (type == "FAT32 ")
     {
         // Xuất  FAT32
         T.displayBootSector(sector); // Display b?ng boot sector
