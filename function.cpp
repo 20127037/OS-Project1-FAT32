@@ -87,7 +87,7 @@ vector<byte> byteArray(FAT32 T, vector<int> clusterArray, LPCWSTR drive)
 	for (int i = 0; i < clusterArray.size(); i++)
 	{
 		int offsetStart = (T.getSB() + T.getNF() * T.getSF() + (clusterArray[i] - 2) * T.getSC()) * T.getBP();
-	
+
 		int sizeCluster = T.getBP() * T.getSC();
 		BYTE* cluster = new BYTE[sizeCluster];
 
@@ -101,7 +101,7 @@ vector<byte> byteArray(FAT32 T, vector<int> clusterArray, LPCWSTR drive)
 	return ByteArray;
 }
 
-long long int convertHexToDec(string hexa) 
+long long int convertHexToDec(string hexa)
 {
 	long long int result = 0;
 	result = stoi(hexa, nullptr, 16);
@@ -281,4 +281,36 @@ void EntryRdet(vector<BYTE> entry) {
 		cout << endl << endl;
 	}
 
+}
+
+int readSector(LPCWSTR  drive, LARGE_INTEGER readPoint, BYTE sector[512])
+{
+	int retCode = 0;
+	DWORD bytesRead;
+	HANDLE device = NULL;
+
+	device = CreateFile(drive,    // Drive to open
+		GENERIC_READ,           // Access mode
+		FILE_SHARE_READ | FILE_SHARE_WRITE,        // Share Mode
+		NULL,                   // Security Descriptor
+		OPEN_EXISTING,          // How to create
+		0,                      // File attributes
+		NULL);                  // Handle to template
+
+	if (device == INVALID_HANDLE_VALUE) // Open Error
+	{
+		printf("CreateFile: %u\n", GetLastError());
+		return 1;
+	}
+
+	SetFilePointerEx(device, readPoint, NULL, FILE_BEGIN);//Set a Point to Read
+
+	if (!ReadFile(device, sector, 512, &bytesRead, NULL))
+	{
+		printf("ReadFile: %u\n", GetLastError());
+	}
+	else
+	{
+		printf("\n");
+	}
 }

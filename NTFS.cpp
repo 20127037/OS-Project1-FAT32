@@ -1,5 +1,15 @@
 ﻿#include "NTFS.h"
 
+int NTFS::getBytesPerSector() {
+    return _BytesPerSector;
+}
+int NTFS::getSectorsPerCluster() {
+    return _SectorsPerCluster;
+}
+long long NTFS::getLogicalClusterNumberforMFT() {
+    return _LogicalClusterNumberforMFT;
+}
+
 // Chuyển từ kiểu Byte của sector đọc từ USB thành string
 void NTFS::convertSectorToString(BYTE sector[512], string sector_str[512]) {
     stringstream ss;
@@ -157,7 +167,7 @@ void NTFS::printHeaderMFT()
     cout << "Sequence Number: " << dec << _SN << endl;
     cout << "Reference Count: " << dec << _RC << endl;
     cout << "Dia chi (offset) bat dau cua attribute dau tien: " << dec << _OA << endl;
-    cout << "Flags: " << dec << _Flag << " (giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định)" << endl;
+    cout << "Flags: " << dec << _Flag << " (gia tri 0x01: MFT entry da duoc su dung - gia tri 0x02: MFT entry cua mot thu muc - gia tri 0x04, 0x08: khong xac dinh)" << endl;
     cout << "So byte trong MFT entry da duoc su dung: " << dec << _UB << endl;
     cout << "Kich thuoc vung dia da duoc cap cho MFT entry: " << dec << _SD << endl;
     //cout << "Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record): " << dec << _BMS << endl;

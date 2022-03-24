@@ -64,6 +64,10 @@ public:
 	void setStartingByteRDET();
 	long int getStartingByteRDET();*/
 
+	int getBytesPerSector();
+	int getSectorsPerCluster();
+	long long getLogicalClusterNumberforMFT();
+
 	int getOA();
 
 	void convertSectorToString(BYTE*, string*);

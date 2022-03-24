@@ -10,6 +10,7 @@
 using namespace std;
 
 int ReadSector(LPCWSTR  drive, int readPoint, BYTE* sector, int bytes);
+int readSector(LPCWSTR, LARGE_INTEGER, BYTE*);
 string ConvertHextoText(string sector[512], string offset, unsigned int byte);
 long long int convertHexToDec(string hexa);
 
@@ -24,7 +25,7 @@ private:
 	int _SCOR = 0; // Offset 2C - số byte 4 - Cluster bắt đầu của RDET
 	int _ExtraInforSector = 0; // Offset 30 - số byte 2 - Sector chứa thông tin phụ (về cluster trống), thường là 1
 	int _BackupBootSector = 0; // Offset 32 - số byte 2 - Sector chứa bản sao lưu của Boot Sector
-	
+
 	long int StartingByteRDET;
 
 public:
@@ -42,7 +43,7 @@ public:
 	void setStartingByteRDET();
 	long int getStartingByteRDET();
 
-	void convertSectorToString(BYTE*, string*, int );
+	void convertSectorToString(BYTE*, string*, int);
 	void displayBootSector(BYTE*);
 	void readInfor(string*);
 	long int convertHexToDec(string);

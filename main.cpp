@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
     string ntfs = ConvertHextoText(res, "03", 8); // kiểm tra NTFS
     string type = ConvertHextoText(res, "52", 8); // ktra có phải FAT32 ko?
-    
+
     if (type == "FAT32   ") // Xuất  FAT32
     {
         T.displayBootSector(sector); // Display bảng boot sector
@@ -59,16 +59,36 @@ int main(int argc, char** argv)
     }
     else if (ntfs == "NTFS    ") // Xuất NTFS
     {
+        BYTE sec[512];
+        LARGE_INTEGER firstByte;
+
         N.displayBootSector(sector);
         cout << endl << "----------------------------------------" << endl;
-        //N.convertSectorToString(sector, res);
+        N.convertSectorToString(sector, res);
         N.readInfor(res);
         N.print();
+
         cout << endl << "----------------------------------------" << endl;
+
+        firstByte.QuadPart = (long long int)(N.getBytesPerSector() * N.getSectorsPerCluster() * N.getLogicalClusterNumberforMFT());
+        readSector(drive, firstByte, sec);
+        string res1[512];
+        N.displayBootSector(sec);
+
+        cout << endl << "----------------------------------------" << endl;
+
+        N.convertSectorToString(sec, res1);
+        N.readInforHeaderMFT(res1);
+        N.printHeaderMFT();
+
+        cout << endl << "----------------------------------------" << endl;
+
+        N.readInfoAttribute(res1, N.getOA());
+        N.printHeaderAttribute();
     }
     else cout << "\nDay khong phai FAT32 hay NTFS. Vui long kiem tra lai o dia doc.";
 
-    
+
     //ReadEntries(0, 0, rdetData, true, volume, txtFiles);
     //đọc bảng fat
    // /*T.setStartingByteRDET();
