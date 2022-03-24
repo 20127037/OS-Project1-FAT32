@@ -1,5 +1,6 @@
 ﻿#include "NTFS.h"
 
+
 // Chuyển từ kiểu Byte của sector đọc từ USB thành string
 void NTFS::convertSectorToString(BYTE sector[512], string sector_str[512]) {
     stringstream ss;
@@ -152,28 +153,28 @@ int NTFS::getOA()
 
 void NTFS::printHeaderMFT()
 {
-    cout << "Dấu hiệu nhận biết MFT entry: " << _SIG << endl;
-    cout << "Địa chỉ (offset) của Update sequence: " << dec << _US << endl;
-    cout << "Số phần tử của mảng Fixup: " << dec << _NF << endl;
+    cout << "Dau hieu nhan biet MFT entry:  " << _SIG << endl;
+    cout << "Dia chi (offset) cua Update sequence: " << dec << _US << endl;
+    cout << "So phan tu cua mang Fixup: " << dec << _NF << endl;
     //cout << "$LogFile Sequence Number (LSN): mã định danh MFT entry của file log (log record): " << dec << _LSN << endl;
-    cout << "Sequence Number: cho biết số lần MFT entry này đã được sử dụng lại: " << dec << _SN << endl;
-    cout << "Reference Count: cho biết số thư mục mà tập tin này được hiển thị trong đó: " << dec << _RC << endl;
-    cout << "Địa chỉ (offset) bắt đầu của attribute đầu tiên, trong MFT entry này là byte thứ 56: " << dec << _OA << endl;
+    cout << "Sequence Number: " << dec << _SN << endl;
+    cout << "Reference Count: " << dec << _RC << endl;
+    cout << "Dia chi (offset) bat dau cua attribute dau tien: " << dec << _OA << endl;
     cout << "Flags: " << dec << _Flag << " (giá trị 0x01: MFT entry đã được sử dụng - giá trị 0x02: MFT entry của một thư mục - giá trị 0x04, 0x08: không xác định)" << endl;
-    cout << "Số byte trong MFT entry đã được sử dụng: " << dec << _UB << endl;
-    cout << "Kích thước vùng đĩa đã được cấp cho MFT entry: " << dec << _SD << endl;
-    cout << "Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record): " << dec << _BMS << endl;
-    cout << "Next attribute ID: mã định danh của attribute kế tiếp sẽ được thêm vào MFT entry: " << dec << _NAID << endl;
+    cout << "So byte trong MFT entry da duoc su dung: " << dec << _UB << endl;
+    cout << "Kich thuoc vung dia da duoc cap cho MFT entry: " << dec << _SD << endl;
+    //cout << "Tham chiếu đến MFT entry cơ sở của nó (Base  MFT Record): " << dec << _BMS << endl;
+    cout << "Next attribute ID: " << dec << _NAID << endl;
 }
 
 void NTFS::printHeaderAttribute() {
-    cout << dec << "Mã loại của attribute (type ID): " << _TID << endl;
-    cout << dec << "Kích thước của attribute: " << _SA << endl;
-    cout << dec << "Cờ báo non-resident: " << _FlagNonRes << endl;
-    cout << dec << "Chiều dài của tên attribute: " << _LN << endl;
-    cout << dec << "Vị trí (offset) chứa tên của attribute: " << _ONA << endl;
-    cout << dec << "Các cờ báo: " << _VF << endl;
-    cout << dec << "Định danh của attribute (định danh này là duy nhất trong phạm vi một MFT entry): " << _AID << endl;
-    cout << dec << "Kích thước phần nội dung của attribute : " << _SC << endl;
-    cout << dec << "Nơi bắt đầu (offset) của phần nội dung attribute: " << _OCA << endl;
+    cout << dec << "Type ID : " << _TID << endl;
+    cout << dec << "Kich thuoc cua attribute: " << _SA << endl;
+    cout << dec << "Flag non-resident: " << _FlagNonRes << endl;
+    cout << dec << "Chieu dai cua ten attribute: " << _LN << endl;
+    cout << dec << "Vi tri chua ten cua attribute: " << _ONA << endl;
+    cout << dec << "Flags: " << _VF << endl;
+    cout << dec << "Dinh danh cua attribute: " << _AID << endl;
+    cout << dec << "Kich thuoc pha nnoi dung cua attribute : " << _SC << endl;
+    cout << dec << "Noi bat dau cua phan noi dung attribute: " << _OCA << endl;
 }

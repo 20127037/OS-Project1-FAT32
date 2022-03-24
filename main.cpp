@@ -42,6 +42,19 @@ int main(int argc, char** argv)
     T.convertSectorToString(sector, res, 512);
     T.readInfor(res);
     T.print();
+
+    string type = ConvertHextoText(sector, "52", 5); // ktra có phải FAT32 ko?
+    if (type == "FAT32")
+    {
+        // Xuất  FAT32
+    }
+    else if (ConvertHextoText(sector, "03", 4) == ""NTFS"")
+    {
+        // Xuất NTFS
+    }
+    else
+        cout <<"\nDay khong phai FAT32 hay NTFS. Vui long kiem tra lai o dia doc."
+
     //vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
     //vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
 

@@ -11,7 +11,6 @@ using namespace std;
 class NTFS {
 private:
 	// BPB
-	string _OEMID = "";
 	int _BytesPerSector = 0; // Offset 0B - số byte 2 - Kích thước 1 sector	(Đơn vị Byte) 
 	int _SectorsPerCluster = 0; // Offset 0D - số byte 1 - Số sector trong 1 cluster  
 	int _MediaDescriptor = 0; // Offset 15 - số byte 1 - Mã xác định loại đĩa 

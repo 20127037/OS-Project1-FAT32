@@ -1,4 +1,5 @@
 ﻿#include "FAT32.h"
+
 int ReadSector(LPCWSTR  drive, int readPoint, BYTE* sector, int bytes)
 {
 	int retCode = 0;
@@ -110,4 +111,21 @@ void EntryRdet(vector<BYTE> entry) {
 		}
 		else cout << entry[i] << " ";
 	}
+}
+long long int convertHexToDec(string hexa) 
+{
+	long long int result = 0;
+	result = stoi(hexa, nullptr, 16);
+
+	return result;
+}
+
+string ConvertHextoText(string sector[512], string offset, unsigned int byte)
+{
+	int pos = convertHexToDec(offset);
+	string resultHex = "";
+	for (int i = pos; i < byte; i++)
+		resultHex += (char)convertHexToDec(sector[i]);
+
+	return resultHex;
 }
