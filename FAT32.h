@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <Windows.h>
+#include <bitset>
 using namespace std;
 
 int ReadSector(LPCWSTR  drive, int readPoint, BYTE* sector, int bytes);
@@ -53,4 +54,10 @@ wstring ConvertWStr(string temp);
 vector<int> clusterArray(FAT32 T, int start, LPCWSTR drive);
 
 vector<byte> byteArray(FAT32 T, vector<int> clusterArray, LPCWSTR drive);
+void EntryRdet(vector<BYTE> entry);
+string convertDectoHex(int dec);
+long long int getSize(vector<BYTE> MainEntry);
+int convertHexCharToInt(char a);
+string convertHextoAscii(string str);
+string getExtraEntry(vector<BYTE> entry);
 void EntryRdet(vector<BYTE> entry);

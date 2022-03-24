@@ -50,6 +50,12 @@ int main(int argc, char** argv)
         T.displayBootSector(sector); // Display bảng boot sector
         T.readInfor(res);
         T.print();
+
+        //Cây thư mục:
+        vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
+        vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
+
+        EntryRdet(rdetData);
     }
     else if (ntfs == "NTFS    ") // Xuất NTFS
     {
@@ -62,10 +68,7 @@ int main(int argc, char** argv)
     }
     else cout << "\nDay khong phai FAT32 hay NTFS. Vui long kiem tra lai o dia doc.";
 
-    //vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
-    //vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
-
-    //EntryRdet(rdetData);
+    
     //ReadEntries(0, 0, rdetData, true, volume, txtFiles);
     //đọc bảng fat
    // /*T.setStartingByteRDET();
