@@ -26,10 +26,6 @@ int ReadSector(LPCWSTR  drive, int readPoint, BYTE* sector, int bytes)
 	{
 		printf("ReadFile: %u\n", GetLastError());
 	}
-	else
-	{
-		printf("Success!\n");
-	}
 }
 
 
@@ -56,13 +52,12 @@ vector<int> clusterArray(FAT32 T, int start, LPCWSTR drive) {//cluser
 	FAT32 temp;
 	BYTE* FAT = new BYTE[bytesFat];
 	ReadSector(drive, startOffset, FAT, bytesFat);
-	temp.displayBootSector(FAT);
 	int cluster = start;
 	int offset;
 	string offsetHEX;
 	stringstream ss;
-	string* res = new string[bytesFat];
-	T.convertSectorToString(FAT, res, bytesFat);
+	string* res = new string[1024*2];
+	T.convertSectorToString(FAT, res, 1024*2);
 
 
 
@@ -221,7 +216,184 @@ string getExtraEntry(vector<BYTE> entry) {
 	}
 	return ss.str();
 }
-void EntryRdet(vector<BYTE> entry) {
+
+bool isLastentry(vector<byte> entry) {
+	for (int i = 0; i < 32; i++)
+	{
+		if ((int)entry[0] != 0x00)
+			return false;
+	}
+	return true;
+}
+int convertHextoDec1(string num) {
+	int len = num.length();
+	int base = 1;
+	int temp = 0;
+	for (int i = len - 1; i >= 0; i--) {
+		if (num[i] >= '0' && num[i] <= '9') {
+			temp += (num[i] - 48) * base;
+			base = base * 16;
+		}
+		else if (num[i] >= 'A' && num[i] <= 'F') {
+			temp += (num[i] - 55) * base;
+			base = base * 16;
+		}
+	}
+	return temp;
+}
+int StartCluster(vector<BYTE> entry, vector<string> ClusterList, long long int& beginCluster)
+{
+	stringstream s1;
+	s1 << convertDectoHex((int)entry[21]) << convertDectoHex((int)entry[20]);
+	s1 << convertDectoHex((int)entry[27]) << convertDectoHex((int)entry[26]);
+	int count = 1;
+	beginCluster = convertHextoDec1(s1.str());
+	long long int curIndexCluster = beginCluster;
+	if (curIndexCluster < 2) return 0;
+	while (ClusterList[curIndexCluster] != "0FFFFFFF") {
+		curIndexCluster = convertHextoDec1(ClusterList[curIndexCluster]);
+		count++;
+	}
+	return count;
+}
+vector<string> getClusterList(BYTE* FAT1, int FATsize, int bytePerCluster) {
+	int i = 0;
+	vector<string> clusterList;
+	while (i < FATsize) {
+		int j = bytePerCluster;
+		stringstream s;
+		do {
+			s << setw(2) << setfill('0') << convertDectoHex((int)FAT1[i + j - 1]);
+			j--;
+		} while (j > 0);
+		i += 4;
+		clusterList.push_back(s.str());
+	}
+	//printVectorString(clusterList);
+	return clusterList;
+}
+string HandleTxtFile(int sectorPosition, int numberOfSector, LPCWSTR drive, FAT32 T) {
+	BYTE contentTable[512];
+	ReadSector(drive, sectorPosition * T.getBP(), contentTable, 512);
+	int i = 0;
+	stringstream s;
+	while ((int)contentTable[i] != 0x00) {
+		s << contentTable[i];
+		i++;
+	}
+	return s.str();
+}
+void TabNTimes(int tab) {
+	for (int i = 0; i < tab; i++)//tab ra
+		cout << "\t";
+}
+void HandleSdet(BYTE bangFat1[512], BYTE* SDETtable, int tableSize, FAT32 T, LPCWSTR disk, int tab) {
+
+	int i = 0;
+	vector<string> clusterList = getClusterList(bangFat1, 512, 4);
+
+	bool isEndRdetTable = false;
+	int indexMainEntry = 0;
+	while (i < tableSize) {
+		vector<vector<BYTE>> extraEntry;
+		vector<BYTE> entryCur;
+		bool isExtreEntry = true;
+		long long int size;
+		string state;
+		do {
+			int j = 0;
+			do {
+				entryCur.push_back(SDETtable[i]);
+				j++;
+				i++;
+			} while (j < 32);
+			if ((int)entryCur[11] == 0x0f) {
+				extraEntry.push_back(entryCur);
+				entryCur.clear();
+			}
+			else {
+				isExtreEntry = false;
+			}
+		} while (isExtreEntry == true);
+
+		if (indexMainEntry < 2) {
+			indexMainEntry++;
+			continue;
+		}
+		indexMainEntry++;
+
+		if ((int)entryCur[0] == 0xe5)
+			continue;
+
+		if (isLastentry(entryCur))
+			break;
+
+		string fileName = "";
+
+		if (extraEntry.size() == 0) {
+			stringstream s;
+			stringstream extensionBuilder;
+			for (int i = 0; i < 8; i++) {
+				s << convertHextoAscii(convertDectoHex((int)entryCur[i]));
+			}
+
+			for (int i = 8; i < 11; i++) {
+				extensionBuilder << convertHextoAscii(convertDectoHex((int)entryCur[i]));
+			}
+			if (extensionBuilder.str() != "   ") {
+				s << ".";
+				s << extensionBuilder.str();
+			}
+			fileName = s.str();
+		}
+
+		while (extraEntry.size() != 0) {
+			vector<BYTE> Entry = extraEntry[extraEntry.size() - 1];
+			string nameComponent = getExtraEntry(Entry);
+			fileName += nameComponent;
+			extraEntry.pop_back();
+		}
+
+		// tìm cluster bắt đầu
+		long long int startClusternum;
+		int numberOfCluster = StartCluster(entryCur, clusterList, startClusternum);
+		int sectorPosition = T.getSB() + T.getSF() * T.getNF() + 0 + (startClusternum - 2) * T.getSC();
+
+
+
+		state = getStatus(to_string((int)entryCur[11]));
+		size = getSize(entryCur);
+
+		TabNTimes(tab); cout << "Name: " << fileName << endl;
+		TabNTimes(tab); cout << "State: " << state << endl;
+		TabNTimes(tab); cout << "Size: " << dec << size << " bytes" << endl;
+		
+
+		// nếu là file txt:
+		if (fileName[fileName.length() - 4] == '.' && fileName.substr(fileName.length() - 3, 3) == "txt") {
+			string content;
+			content = HandleTxtFile(sectorPosition, numberOfCluster * T.getSC(), disk, T);
+			TabNTimes(tab); cout << "Content: " << content << endl;
+			
+		}
+
+		// nếu là folder:
+		if (entryCur[11] == 0x10) {
+			BYTE* SDETtable = new BYTE[numberOfCluster * T.getBP()];
+			ReadSector(disk, sectorPosition * T.getBP(), SDETtable, numberOfCluster * T.getBP());
+			HandleSdet(bangFat1, SDETtable, numberOfCluster * T.getBP(), T, disk, tab+1);
+			delete[] SDETtable;
+		}
+
+		cout << endl;
+
+		entryCur.clear();
+
+	}
+}
+
+void EntryRdet(vector<BYTE> entry, BYTE bangFat1[512], FAT32 T, LPCWSTR drive) {
+	vector<string> clusterList = getClusterList(bangFat1, 512, 4);
 	int curStart = 0;
 	int curEnd = 32;
 	int totalByte = 0;
@@ -250,12 +422,16 @@ void EntryRdet(vector<BYTE> entry) {
 		if ((int)curMainEntry[0] == 0xe5)
 			continue;
 
+		if (isLastentry(curMainEntry))
+			break;
+
 		size = getSize(curMainEntry);
 		status = getStatus(to_string((int)curMainEntry[11]));
 
 		string FileName;
-		stringstream FileEnd;
+		
 		if (extraEntry.size() == 0) {
+			stringstream FileEnd;
 			stringstream s;
 			for (int i = 0; i < 11; i++) {
 				if (i < 8)
@@ -274,11 +450,32 @@ void EntryRdet(vector<BYTE> entry) {
 			FileName += name;
 			extraEntry.pop_back();
 		}
+
+		// tìm cluster bat dau
+		long long int startCluster;
+		int numCluster = StartCluster(curMainEntry, clusterList, startCluster);
+		int sectorPosition = T.getSB() + T.getSF() * T.getNF() + 0 + (startCluster - 2) * T.getSC();
+
 		cout << "Ten: " << FileName << endl;
 		cout << "Trang Thai: " << status << endl;
 		cout << "Kich Co:" << dec << size << " bytes" << endl;
-		cout << "-----";
+
+		// nếu là file txt:
+		if (FileName[FileName.length() - 4] == '.' && FileName.substr(FileName.length() - 3, 3) == "txt") {
+			string content;
+			content = HandleTxtFile(sectorPosition, numCluster * T.getSC(), drive, T);
+			cout << "Content: " << content << endl;
+		}
+
+		// nếu là folder:
+		if (curMainEntry[11] == 0x10) {
+			BYTE* SDETtable = new BYTE[numCluster * T.getBP()];
+			ReadSector(drive, sectorPosition * T.getBP(), SDETtable, numCluster * T.getBP());
+			HandleSdet(bangFat1, SDETtable, numCluster * T.getBP(), T, drive, 1);
+			delete[] SDETtable;
+		}
 		cout << endl << endl;
+
 	}
 
 }
@@ -314,3 +511,4 @@ int readSector(LPCWSTR  drive, LARGE_INTEGER readPoint, BYTE sector[512])
 		printf("\n");
 	}
 }
+

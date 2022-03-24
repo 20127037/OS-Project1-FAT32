@@ -55,10 +55,20 @@ wstring ConvertWStr(string temp);
 vector<int> clusterArray(FAT32 T, int start, LPCWSTR drive);
 
 vector<byte> byteArray(FAT32 T, vector<int> clusterArray, LPCWSTR drive);
-void EntryRdet(vector<BYTE> entry);
+
 string convertDectoHex(int dec);
 long long int getSize(vector<BYTE> MainEntry);
 int convertHexCharToInt(char a);
 string convertHextoAscii(string str);
 string getExtraEntry(vector<BYTE> entry);
-void EntryRdet(vector<BYTE> entry);
+
+vector<byte> ReadRawByte(int start, int length, vector<byte> data);
+void folderHandler(vector<byte> entry, FAT32 t, LPCWSTR drive);
+string getExtraEntry(vector<BYTE> entry);
+bool isLastentry(vector<byte> entry);
+int StartCluster(vector<BYTE> entry, vector<string> ClusterList, long long int& beginCluster);
+vector<string> getClusterList(BYTE* FAT1, int FATsize, int bytePerCluster);
+string HandleTxtFile(int sectorPosition, int numberOfSector, LPCWSTR drive, FAT32 T);
+
+void HandleSdet(BYTE bangFat1[512], BYTE* SDETtable, int tableSize, FAT32 T, LPCWSTR disk);
+void EntryRdet(vector<BYTE> entry, BYTE bangFat1[512], FAT32 T, LPCWSTR drive);

@@ -52,10 +52,19 @@ int main(int argc, char** argv)
         T.print();
 
         //Cây thư mục:
-        vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng
+        vector<int> rDetClusters = clusterArray(T, T.getSCOR(), drive); //cần <20s để tạo bảng // giảm bộ nhớ về 2048 có thể chỉnh sửa lại
         vector<BYTE> rdetData = byteArray(T, rDetClusters, drive);
 
-        EntryRdet(rdetData);
+        BYTE bangFat1[512];
+        ReadSector(drive, T.getSB() * T.getBP(), bangFat1, 512);
+        //showingFAT32Table(bangFat1, 512);
+        BYTE bangFat2[512];
+        ReadSector(drive, (T.getSB() + T.getSF()) * T.getBP(), bangFat2, 512);
+
+        BYTE bangRDET[512];
+        ReadSector(drive, (T.getSB() + T.getSF() * T.getNF()) * T.getBP(), bangRDET, 512);
+        cout << endl << "----------------------------------------" << endl;
+        EntryRdet(rdetData, bangFat1, T, drive);
     }
     else if (ntfs == "NTFS    ") // Xuất NTFS
     {
