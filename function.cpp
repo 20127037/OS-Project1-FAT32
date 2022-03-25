@@ -328,35 +328,35 @@ void HandleSdet(BYTE bangFat1[512], BYTE* SDETtable, int tableSize, FAT32 T, LPC
 		if (isLastentry(entryCur))
 			break;
 
-		string fileName = "";
+		string FileName = "";
 
 		if (extraEntry.size() == 0) {
 			stringstream s;
-			stringstream extensionBuilder;
+			stringstream FileEnd;
 			for (int i = 0; i < 8; i++) {
 				s << convertHextoAscii(convertDectoHex((int)entryCur[i]));
 			}
 
 			for (int i = 8; i < 11; i++) {
-				extensionBuilder << convertHextoAscii(convertDectoHex((int)entryCur[i]));
+				FileEnd << convertHextoAscii(convertDectoHex((int)entryCur[i]));
 			}
-			if (extensionBuilder.str() != "   ") {
+			if (FileEnd.str() != "   ") {
 				s << ".";
-				s << extensionBuilder.str();
+				s << FileEnd.str();
 			}
-			fileName = s.str();
+			FileName = s.str();
 		}
 
 		while (extraEntry.size() != 0) {
 			vector<BYTE> Entry = extraEntry[extraEntry.size() - 1];
 			string nameComponent = getExtraEntry(Entry);
-			fileName += nameComponent;
+			FileName += nameComponent;
 			extraEntry.pop_back();
 		}
 
 		// tìm cluster bắt đầu
 		long long int startClusternum;
-		int numberOfCluster = StartCluster(entryCur, clusterList, startClusternum);
+		int numCluster = StartCluster(entryCur, clusterList, startClusternum);
 		int sectorPosition = T.getSB() + T.getSF() * T.getNF() + 0 + (startClusternum - 2) * T.getSC();
 
 
@@ -364,24 +364,24 @@ void HandleSdet(BYTE bangFat1[512], BYTE* SDETtable, int tableSize, FAT32 T, LPC
 		state = getStatus(to_string((int)entryCur[11]));
 		size = getSize(entryCur);
 
-		TabNTimes(tab); cout << "Ten: " << fileName << endl;
+		TabNTimes(tab); cout << "Ten: " << FileName << endl;
 		TabNTimes(tab); cout << "Trang Thai: " << state << endl;
 		TabNTimes(tab); cout << "Kich Co: " << dec << size << " bytes" << endl;
 		
 
 		// nếu là file txt:
-		if (fileName[fileName.length() - 4] == '.' && fileName.substr(fileName.length() - 3, 3) == "txt") {
+		if (FileName[FileName.length() - 4] == '.' && FileName.substr(FileName.length() - 3, 3) == "txt") {
 			string content;
-			content = HandleTxtFile(sectorPosition, numberOfCluster * T.getSC(), disk, T);
+			content = HandleTxtFile(sectorPosition, numCluster * T.getSC(), disk, T);
 			TabNTimes(tab); cout << "Content: " << content << endl;
 			
 		}
 
 		// nếu là folder:
 		if (entryCur[11] == 0x10) {
-			BYTE* SDETtable = new BYTE[numberOfCluster * T.getBP()];
-			ReadSector(disk, sectorPosition * T.getBP(), SDETtable, numberOfCluster * T.getBP());
-			HandleSdet(bangFat1, SDETtable, numberOfCluster * T.getBP(), T, disk, tab+1);
+			BYTE* SDETtable = new BYTE[numCluster * T.getBP()];
+			ReadSector(disk, sectorPosition * T.getBP(), SDETtable, numCluster * T.getBP());
+			HandleSdet(bangFat1, SDETtable, numCluster * T.getBP(), T, disk, tab+1);
 			delete[] SDETtable;
 		}
 
