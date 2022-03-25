@@ -176,6 +176,6 @@ void NTFS::printHeaderAttribute() {
     cout << dec << "Vi tri chua ten cua attribute: " << _ONA << endl;
     cout << dec << "Flags: " << _VF << endl;
     cout << dec << "Dinh danh cua attribute: " << _AID << endl;
-    cout << dec << "Kich thuoc pha nnoi dung cua attribute : " << _SC << endl;
+    cout << dec << "Kich thuoc phan noi dung cua attribute : " << _SC << endl;
     cout << dec << "Noi bat dau cua phan noi dung attribute: " << _OCA << endl;
 }
