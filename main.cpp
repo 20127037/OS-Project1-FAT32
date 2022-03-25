@@ -71,7 +71,8 @@ int main(int argc, char** argv)
         BYTE sec[512];
         LARGE_INTEGER firstByte;
 
-        N.displayBootSector(sector);
+        // BPB
+        N.displayBootSector(sector); // Bắt đầu từ offset 0
         cout << endl << "----------------------------------------" << endl;
         N.convertSectorToString(sector, res);
         N.readInfor(res);
@@ -79,10 +80,11 @@ int main(int argc, char** argv)
 
         cout << endl << "----------------------------------------" << endl;
 
+        // HEADER MFT
         firstByte.QuadPart = (long long int)(N.getBytesPerSector() * N.getSectorsPerCluster() * N.getLogicalClusterNumberforMFT());
         readSector(drive, firstByte, sec);
         string res1[512];
-        N.displayBootSector(sec);
+        N.displayBootSector(sec); // Bắt đầu từ offset firstByte
 
         cout << endl << "----------------------------------------" << endl;
 
@@ -92,6 +94,7 @@ int main(int argc, char** argv)
 
         cout << endl << "----------------------------------------" << endl;
 
+        // HEADER ATTRIBUTE
         N.readInfoAttribute(res1, N.getOA());
         N.printHeaderAttribute();
     }
@@ -103,19 +106,6 @@ int main(int argc, char** argv)
    // /*T.setStartingByteRDET();
    // ReadSector(drive, T.getStartingByteRDET(), RDET);
    //displayBootSector(RDET);*/
-
- //NTFS N;
- //string res[512];
- ////BYTE RDET[512];
- //N.displayBootSector(sector);
- //cout << endl;
- //N.convertSectorToString(sector, res);
- //N.readInfor(res);
- //N.print();
- //cout << endl << endl;
-/*  N.readInforHeaderMFT(res);
-  N.printHeaderMFT();*/
-
 
     return 0;
 }
