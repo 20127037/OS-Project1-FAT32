@@ -285,7 +285,7 @@ string HandleTxtFile(int sectorPosition, int numberOfSector, LPCWSTR drive, FAT3
 }
 void TabNTimes(int tab) {
 	for (int i = 0; i < tab; i++)//tab ra
-		cout << "\t";
+		cout << "\t"; printf("%c", 200);
 }
 void HandleSdet(BYTE bangFat1[512], BYTE* SDETtable, int tableSize, FAT32 T, LPCWSTR disk, int tab) {
 
@@ -364,9 +364,9 @@ void HandleSdet(BYTE bangFat1[512], BYTE* SDETtable, int tableSize, FAT32 T, LPC
 		state = getStatus(to_string((int)entryCur[11]));
 		size = getSize(entryCur);
 
-		TabNTimes(tab); cout << "Name: " << fileName << endl;
-		TabNTimes(tab); cout << "State: " << state << endl;
-		TabNTimes(tab); cout << "Size: " << dec << size << " bytes" << endl;
+		TabNTimes(tab); cout << "Ten: " << fileName << endl;
+		TabNTimes(tab); cout << "Trang Thai: " << state << endl;
+		TabNTimes(tab); cout << "Kich Co: " << dec << size << " bytes" << endl;
 		
 
 		// nếu là file txt:

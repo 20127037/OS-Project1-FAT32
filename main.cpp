@@ -57,12 +57,7 @@ int main(int argc, char** argv)
 
         BYTE bangFat1[512];
         ReadSector(drive, T.getSB() * T.getBP(), bangFat1, 512);
-        //showingFAT32Table(bangFat1, 512);
-        BYTE bangFat2[512];
-        ReadSector(drive, (T.getSB() + T.getSF()) * T.getBP(), bangFat2, 512);
 
-        BYTE bangRDET[512];
-        ReadSector(drive, (T.getSB() + T.getSF() * T.getNF()) * T.getBP(), bangRDET, 512);
         cout << endl << "----------------------------------------" << endl;
         EntryRdet(rdetData, bangFat1, T, drive);
     }
